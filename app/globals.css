@@ -1,26 +1,560 @@
 @import "tailwindcss";
 
-/* Dark and calm by default: deep night blues, soft lavender accent. */
+/* ==========================================================================
+   Dream Painter design system
+   Dark celestial, editorial. Tokens first, then a small set of component
+   classes (glass, btn, field, chip, badge, divider, tooltip). Pages compose
+   these with Tailwind utilities; avoid one-off colors.
+   ========================================================================== */
+
 :root {
-  --background: #0b0d17;
-  --surface: #141829;
-  --foreground: #dfe2f0;
-  --muted: #8a90ad;
-  --accent: #b7a6f0;
   color-scheme: dark;
+
+  /* Night palette (backgrounds, darkest -> lightest) */
+  --night-0: #05060f;
+  --night-1: #0a0c1f;
+  --night-2: #111433;
+  --night-3: #1b1d45;
+  --plum: #241a44;
+
+  /* Ink (text). Contrast on --night-1: ink 16:1, muted 9:1, faint 5.4:1 */
+  --ink: #ece8fb;
+  --ink-muted: #b8b4d8;
+  --ink-faint: #8f8bb3;
+
+  /* Accents: used sparingly */
+  --lavender: #c9bcff;
+  --violet: #9b87f5;
+  --cyan: #93e2ee;
+  --rose: #f1aecb;
+  --gold: #f3d19c;
+  --danger: #f4a3b0;
+
+  /* Lines & surfaces */
+  --line: rgb(201 188 255 / 0.12);
+  --line-strong: rgb(201 188 255 / 0.24);
+  --glass: rgb(20 22 58 / 0.55);
+  --glass-strong: rgb(26 28 70 / 0.72);
+  --glass-hover: rgb(34 36 84 / 0.7);
+
+  /* Spacing scale (4px base) used for layout rhythm */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Radii */
+  --radius-sm: 0.625rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+
+  /* Shadows: soft, low, no neon */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 8px 24px -8px rgb(3 3 12 / 0.6);
+  --shadow-lg: 0 24px 60px -20px rgb(3 3 12 / 0.75);
+  --shadow-glow: 0 0 0 1px rgb(201 188 255 / 0.1), 0 12px 40px -12px rgb(155 135 245 / 0.35);
+
+  /* Motion */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-breathe: cubic-bezier(0.45, 0, 0.55, 1);
+  --dur-fast: 150ms;
+  --dur-base: 260ms;
+  --dur-slow: 600ms;
+
+  --focus-ring: 0 0 0 2px var(--night-1), 0 0 0 4px var(--lavender);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-night-0: var(--night-0);
+  --color-night-1: var(--night-1);
+  --color-night-2: var(--night-2);
+  --color-night-3: var(--night-3);
+  --color-plum: var(--plum);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-lavender: var(--lavender);
+  --color-violet: var(--violet);
+  --color-cyan: var(--cyan);
+  --color-rose: var(--rose);
+  --color-gold: var(--gold);
+  --color-danger: var(--danger);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --shadow-soft: var(--shadow-md);
+  --shadow-lift: var(--shadow-lg);
+  --ease-soft: var(--ease-soft);
+}
+
+html {
+  background: var(--night-0);
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(155 135 245 / 0.35);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ---------- Typography ---------- */
+.font-display {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+.eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.poem {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  line-height: 1.6;
+  white-space: pre-line;
+  color: var(--ink);
+}
+
+/* ---------- Surfaces ---------- */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+  box-shadow: var(--shadow-md);
+}
+.glass-strong {
+  background: var(--glass-strong);
+}
+.card-interactive {
+  transition:
+    transform var(--dur-base) var(--ease-soft),
+    border-color var(--dur-base) var(--ease-soft),
+    background-color var(--dur-base) var(--ease-soft);
+}
+.card-interactive:hover {
+  transform: translateY(-2px);
+  border-color: var(--line-strong);
+}
+
+.divider {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0 1.4rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--dur-base) var(--ease-soft),
+    border-color var(--dur-base) var(--ease-soft),
+    color var(--dur-base) var(--ease-soft),
+    transform var(--dur-fast) var(--ease-soft),
+    opacity var(--dur-base);
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: linear-gradient(180deg, #d8ceff, #b5a4fb);
+  color: #17123a;
+  box-shadow: 0 10px 30px -12px rgb(155 135 245 / 0.6);
+}
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #e4dcff, #c3b4fc);
+}
+.btn-secondary {
+  background: var(--glass-strong);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--glass-hover);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-muted);
+}
+.btn-ghost:hover:not(:disabled) {
+  color: var(--ink);
+  background: rgb(201 188 255 / 0.07);
+}
+.btn-danger {
+  background: rgb(244 163 176 / 0.12);
+  border-color: rgb(244 163 176 / 0.35);
+  color: var(--danger);
+}
+.btn-danger:hover:not(:disabled) {
+  background: rgb(244 163 176 / 0.2);
+}
+.btn-icon {
+  width: 3rem;
+  min-height: 3rem;
+  padding: 0;
+}
+.btn-sm {
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}
+.btn-sm.btn-icon {
+  width: 2.5rem;
+}
+.btn[data-loading="true"] {
+  color: transparent !important;
+  pointer-events: none;
+}
+.btn[data-loading="true"]::after {
+  content: "";
+  position: absolute;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  border-color: rgb(23 18 58 / 0.25);
+  border-top-color: #17123a;
+  animation: spin 0.8s linear infinite;
+}
+.btn-secondary[data-loading="true"]::after,
+.btn-ghost[data-loading="true"]::after {
+  border-color: rgb(236 232 251 / 0.2);
+  border-top-color: var(--ink);
+}
+
+/* ---------- Form fields ---------- */
+.field {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  background: rgb(10 12 31 / 0.6);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  transition:
+    border-color var(--dur-base) var(--ease-soft),
+    background-color var(--dur-base);
+}
+.field::placeholder {
+  color: var(--ink-faint);
+}
+.field:hover {
+  border-color: var(--line-strong);
+}
+.field:focus-visible {
+  border-color: var(--lavender);
+  box-shadow: 0 0 0 3px rgb(201 188 255 / 0.18);
+}
+select.field {
+  appearance: none;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b8b4d8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+}
+select.field option {
+  background: var(--night-2);
+}
+.label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  margin-bottom: 0.4rem;
+}
+
+/* ---------- Chips (selectable) & badges (static) ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgb(20 22 58 / 0.4);
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--dur-base) var(--ease-soft);
+}
+.chip:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+.chip[aria-pressed="true"],
+.chip[aria-checked="true"],
+.chip:has(input:checked) {
+  background: rgb(201 188 255 / 0.14);
+  border-color: rgb(201 188 255 / 0.5);
+  color: var(--ink);
+}
+.chip:has(input:focus-visible) {
+  box-shadow: var(--focus-ring);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  background: rgb(201 188 255 / 0.08);
+  border: 1px solid var(--line);
+  color: var(--ink-muted);
+}
+.mood-dot {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 0.04);
+}
+
+/* ---------- Tooltip (CSS only; content in data-tip) ---------- */
+.tooltip {
+  position: relative;
+}
+.tooltip::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.5rem);
+  transform: translate(-50%, 4px);
+  white-space: nowrap;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--night-3);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 0.75rem;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--dur-fast),
+    transform var(--dur-fast) var(--ease-soft);
+  z-index: 40;
+}
+.tooltip:hover::after,
+.tooltip:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ---------- Skeleton & misc ---------- */
+.skeleton {
+  background: linear-gradient(100deg, rgb(201 188 255 / 0.05) 30%, rgb(201 188 255 / 0.1) 50%, rgb(201 188 255 / 0.05) 70%);
+  background-size: 300% 100%;
+  animation: shimmer 2.4s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+.sr-only-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* ==========================================================================
+   Atmosphere: fixed, non-interactive, transform/opacity-only animations
+   ========================================================================== */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  background:
+    radial-gradient(120% 80% at 50% -10%, #1c1a4a 0%, transparent 60%),
+    radial-gradient(90% 60% at 100% 100%, #1b1238 0%, transparent 60%),
+    linear-gradient(180deg, var(--night-1) 0%, var(--night-0) 100%);
+}
+.atmosphere > * {
+  position: absolute;
+  will-change: transform, opacity;
+}
+.nebula {
+  inset: -30%;
+  opacity: 0.55;
+  background:
+    radial-gradient(35% 30% at 30% 35%, rgb(124 98 220 / 0.22), transparent 70%),
+    radial-gradient(30% 25% at 70% 60%, rgb(80 170 200 / 0.12), transparent 70%),
+    radial-gradient(25% 20% at 55% 20%, rgb(220 130 180 / 0.1), transparent 70%);
+  animation: nebula-drift 60s var(--ease-breathe) infinite alternate;
+}
+.nebula-2 {
+  animation-duration: 85s;
+  animation-direction: alternate-reverse;
+  opacity: 0.4;
+  transform: rotate(140deg);
+}
+.orb {
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--orb-color) 0%, transparent 70%);
+  opacity: 0.5;
+  animation: orb-float var(--orb-dur, 40s) var(--ease-breathe) infinite alternate;
+}
+.stars {
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  border-radius: 999px;
+  background: transparent;
+  animation: twinkle var(--twinkle, 6s) ease-in-out infinite alternate;
+}
+/* Gentle scroll parallax where supported (no JS) */
+@supports (animation-timeline: scroll()) {
+  .parallax-slow {
+    animation:
+      twinkle var(--twinkle, 6s) ease-in-out infinite alternate,
+      parallax-slow linear both;
+    animation-timeline: auto, scroll(root);
+  }
+  .parallax-fast {
+    animation:
+      twinkle var(--twinkle, 6s) ease-in-out infinite alternate,
+      parallax-fast linear both;
+    animation-timeline: auto, scroll(root);
+  }
+}
+
+@keyframes nebula-drift {
+  from { transform: translate3d(-3%, -2%, 0) scale(1); }
+  to { transform: translate3d(3%, 2%, 0) scale(1.08); }
+}
+@keyframes orb-float {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(var(--orb-dx, 40px), var(--orb-dy, -30px), 0) scale(1.12); }
+}
+@keyframes twinkle {
+  from { opacity: 0.45; }
+  to { opacity: 1; }
+}
+@keyframes parallax-slow {
+  to { transform: translate3d(0, -60px, 0); }
+}
+@keyframes parallax-fast {
+  to { transform: translate3d(0, -160px, 0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes reveal {
+  from { opacity: 0; transform: scale(1.04); filter: blur(12px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+@keyframes ring {
+  from { transform: scale(1); opacity: 0.55; }
+  to { transform: scale(1.9); opacity: 0; }
+}
+@keyframes sparkle {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(1); }
+}
+@keyframes ken-burns {
+  0% { transform: scale(1.06) translate3d(-1.5%, 1%, 0); }
+  100% { transform: scale(1.18) translate3d(1.5%, -1.5%, 0); }
+}
+@keyframes mote {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  15% { opacity: var(--mote-o, 0.7); }
+  85% { opacity: var(--mote-o, 0.7); }
+  100% { transform: translate3d(var(--mote-dx, 10px), -140px, 0); opacity: 0; }
+}
+@keyframes orb-pulse {
+  0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+  50% { transform: scale(1.08); filter: hue-rotate(25deg); }
+}
+
+.animate-page-in { animation: page-in var(--dur-slow) var(--ease-soft) both; }
+.animate-fade-in { animation: fade-in var(--dur-slow) var(--ease-soft) both; }
+.animate-rise-in { animation: rise-in var(--dur-slow) var(--ease-soft) both; }
+.animate-reveal { animation: reveal 1.6s var(--ease-soft) both; }
+
+/* ---------- Reduced motion: keep fades, drop movement ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .nebula,
+  .orb,
+  .stars,
+  .ken-burns,
+  .mote {
+    animation: none !important;
+  }
 }
