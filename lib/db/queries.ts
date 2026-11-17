@@ -65,13 +65,13 @@ export function listDreams(filter: DreamFilter = {}): DreamWithSymbols[] {
   const where = [];
   if (filter.q?.trim()) {
     // Escape LIKE wildcards so user input is matched literally.
-    const term = `%${filter.q.trim().replace(/[\%_]/g, (c) => `\${c}`)}%`;
+    const term = `%${filter.q.trim().replace(/[\\%_]/g, (c) => "\\" + c)}%`;
     where.push(
       or(
-        sql`${dreams.rawText} LIKE ${term} ESCAPE '\'`,
-        sql`${dreams.cleanedText} LIKE ${term} ESCAPE '\'`,
-        sql`${dreams.poem} LIKE ${term} ESCAPE '\'`,
-        sql`${dreams.title} LIKE ${term} ESCAPE '\'`,
+        sql`${dreams.rawText} LIKE ${term} ESCAPE '\\'`,
+        sql`${dreams.cleanedText} LIKE ${term} ESCAPE '\\'`,
+        sql`${dreams.poem} LIKE ${term} ESCAPE '\\'`,
+        sql`${dreams.title} LIKE ${term} ESCAPE '\\'`,
       ),
     );
   }
