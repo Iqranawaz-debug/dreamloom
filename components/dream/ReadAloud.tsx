@@ -27,8 +27,9 @@ export function ReadAloud({ text }: { text: string }) {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- speechSynthesis only exists in the browser
     setSupported("speechSynthesis" in window);
-    speechSynthesis?.getVoices(); // some browsers load voices lazily
+    if ("speechSynthesis" in window) speechSynthesis.getVoices(); // some browsers load voices lazily
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- a counter, not a DOM node: cancels the running read
       runRef.current++;
       if ("speechSynthesis" in window) speechSynthesis.cancel();
     };

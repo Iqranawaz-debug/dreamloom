@@ -39,7 +39,8 @@ async function ask<T extends z.ZodType>(schema: T, prompt: string, effort: "low"
   return res.parsed_output as z.infer<T>;
 }
 
-const fence = (label: string, text: string) => `<${label}>\n${text}\n</${label}>`;
+// Dream text is untrusted: it must not be able to close its own delimiter.
+const fence = (label: string, text: string) => `<${label}>\n${text.replaceAll(`</${label}`, `< /${label}`)}\n</${label}>`;
 
 export function anthropicText(): TextProvider {
   return {

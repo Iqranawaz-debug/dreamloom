@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { HttpError, IdSchema, handle, readJson } from "@/lib/api";
 import { writePoem } from "@/lib/ai/text";
-import { DreamTextSchema, PoemStyleSchema } from "@/lib/ai/schemas";
+import { CleanedTextSchema, PoemStyleSchema } from "@/lib/ai/schemas";
 import { getDream, updateDream } from "@/lib/db/queries";
 
 const Body = z.union([
   z.object({ dreamId: IdSchema, style: PoemStyleSchema }),
-  z.object({ cleanedText: DreamTextSchema, style: PoemStyleSchema }),
+  z.object({ cleanedText: CleanedTextSchema, style: PoemStyleSchema }),
 ]);
 
 /** Write (or rewrite) the poem. With dreamId, it's saved on the dream. */

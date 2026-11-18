@@ -1,44 +1,73 @@
 # Dream Painter
 
-Speak or type a dream right after waking. Dream Painter asks a few gentle questions, then paints
-it and writes a short poem. Over time it keeps a private dream diary of recurring symbols and moods.
+Speak or type a dream right after waking. Dream Painter asks a few gentle questions, paints it,
+writes a short poem, and keeps a private diary of your recurring symbols and moods.
 
-Local-first: dreams are stored in a SQLite file on your machine.
+Local-first: dreams and paintings are stored on your machine. No account, no analytics.
 
 ## Requirements
 - Node.js 20.9+ (developed on Node 24)
-- An Anthropic API key
+- An Anthropic API key only if you turn off the built-in mock AI
 
 ## Run locally
 
 ```bash
 npm install
-cp .env.example .env.local   # then add your ANTHROPIC_API_KEY
+```
+
+```bash
+cp .env.example .env.local
+```
+
+```bash
+npm run db:seed
+```
+
+```bash
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:3000. Seeding is optional: it adds 15 sample dreams, can be re-run safely,
+and never touches your own dreams.
+
+## Mock or real AI
+`USE_MOCK_AI` defaults to `true`, so everything works with no keys. To use Claude for questions,
+analysis and poems, set `USE_MOCK_AI=false` and `ANTHROPIC_API_KEY` in `.env.local`.
+
+Paintings still come from the built-in mock painter, because no real image provider is connected
+yet. To add one, create a file in `lib/ai/providers/` that implements `ImageProvider`, register it
+in `lib/ai/providers/index.ts`, and set `IMAGE_PROVIDER`.
 
 ## Scripts
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Dev server |
 | `npm run build` / `npm start` | Production build and serve |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | TypeScript check |
-| `npm run db:generate` | Generate Drizzle migrations from `lib/db/schema.ts` |
-| `npm run db:migrate` | Apply migrations to the local database |
+| `npm run lint` / `npm run typecheck` | Code checks |
+| `npm run test:pipeline` | Runs followups, analysis, painting, poem and save end to end |
+| `npm run db:seed` | Replaces the sample dreams |
+| `npm run db:generate` / `npm run db:migrate` | Create / apply Drizzle migrations (also applied on first run) |
 | `npm run db:studio` | Browse the local database |
 
-## Configuration
-See `.env.example`. Keys are read only on the server and never sent to the browser.
-The database file lives in `data/` (git-ignored).
+## Privacy and security
+- Dreams, paintings and the passcode hash live in `data/`, which git ignores.
+- Dream text leaves the device only when `USE_MOCK_AI=false`, and only to Anthropic.
+- API keys are read on the server and never reach the browser.
+- The optional passcode (Settings) gates every page, API route and painting.
+- Requests from other websites and unknown hostnames are refused.
+
+## Install as an app
+Dream Painter is a PWA. Installing and notifications need `localhost` or HTTPS. Browser
+notifications only fire while the app is open, so Settings also offers a daily calendar event.
 
 ## Structure
 ```
-app/         routes and layouts
-components/  UI components
-lib/ai/      Anthropic client + pluggable image provider (generateImage)
-lib/db/      Drizzle schema and SQLite connection
-data/        local SQLite database (not committed)
+app/         routes, layouts and API handlers
+components/  UI (capture, dream, diary, insights, year, settings, ui)
+hooks/       browser speech recognition
+lib/ai/      text and painting functions, schemas, providers
+lib/db/      Drizzle schema, migrations, queries
+proxy.ts     hostname allow-list and passcode gate
+scripts/     seed, pipeline test, icon generator
+data/        local database, paintings, lock file (not committed)
 ```

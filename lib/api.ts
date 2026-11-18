@@ -39,7 +39,7 @@ export async function readJson<T extends z.ZodType>(req: Request, schema: T): Pr
 export function assertSameOrigin(req: Request) {
   const origin = req.headers.get("origin");
   if (!origin) return; // same-origin GETs and non-browser clients (scripts) omit it
-  const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
+  const host = req.headers.get("host");
   try {
     if (new URL(origin).host === host) return;
   } catch {}
@@ -67,7 +67,7 @@ export function handle<Ctx>(fn: (req: Request, ctx: Ctx) => Promise<Response>) {
           { status: 400 },
         );
       if (e instanceof AiOutputError) {
-        console.error("[ai] invalid output:", e.cause instanceof ZodError ? e.cause.issues : e.message);
+        console.error("[ai] invalid output:", e.cause instanceof ZodError ? e.cause.issues.map((i) => `${i.path.join(".")}: ${i.code}`) : e.name);
         return NextResponse.json({ error: "The dream spirits mumbled. Please try again." }, { status: 502 });
       }
       if (e instanceof Anthropic.APIError) {
@@ -76,7 +76,8 @@ export function handle<Ctx>(fn: (req: Request, ctx: Ctx) => Promise<Response>) {
           e.status === 401 ? "AI key is missing or invalid (check .env.local)." : e.status === 429 ? "The AI is busy. Try again in a moment." : "The AI service had a problem. Please try again.";
         return NextResponse.json({ error: msg }, { status: 502 });
       }
-      console.error("[api] unexpected error:", e instanceof Error ? `${e.name}: ${e.message}` : e);
+      // Name only: database and provider messages can quote dream text, which must never reach logs.
+      console.error("[api] unexpected error:", e instanceof Error ? e.name : "unknown");
       return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
     }
   };

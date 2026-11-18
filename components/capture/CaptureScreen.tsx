@@ -122,16 +122,15 @@ export function CaptureScreen() {
         </div>
 
         {/* Mode switch */}
-        <div role="radiogroup" aria-label="How do you want to tell it?" className="glass mt-8 inline-flex rounded-full p-1">
+        <div role="group" aria-label="How do you want to tell it?" className="glass mt-8 inline-flex rounded-full p-1">
           {(["voice", "write"] as const).map((m) => (
             <button
               key={m}
               type="button"
-              role="radio"
-              aria-checked={mode === m}
+              aria-pressed={mode === m}
               disabled={m === "voice" && speech.supported === false}
               onClick={() => switchMode(m)}
-              className="btn btn-sm min-w-28 rounded-full text-ink-muted aria-checked:bg-lavender/15 aria-checked:text-ink disabled:opacity-40"
+              className="btn btn-sm min-w-28 rounded-full text-ink-muted aria-pressed:bg-lavender/15 aria-pressed:text-ink disabled:opacity-40"
             >
               <Icon name={m === "voice" ? "mic" : "pen"} className="h-4 w-4" />
               {m === "voice" ? "Speak" : "Write"}

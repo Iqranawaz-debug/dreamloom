@@ -3,6 +3,8 @@ import { MAX_ANSWER_CHARS, MAX_DREAM_CHARS, MOOD_IDS, PAINT_STYLE_IDS, POEM_STYL
 
 // ---- Inputs (validated at API boundaries and inside lib/ai/text.ts) ----
 export const DreamTextSchema = z.string().trim().min(3, "Tell a little more of the dream").max(MAX_DREAM_CHARS);
+/** Retold dream: the raw text plus folded-in answers, so it may be longer than the capture limit. */
+export const CleanedTextSchema = z.string().trim().min(3).max(MAX_DREAM_CHARS + 2000);
 export const MoodSchema = z.enum(MOOD_IDS);
 export const PaintStyleSchema = z.enum(PAINT_STYLE_IDS);
 export const PoemStyleSchema = z.enum(POEM_STYLE_IDS);
@@ -22,7 +24,7 @@ export const SymbolSchema = z
   .regex(/^[a-z]{2,20}$/, "symbols are single lowercase nouns");
 
 export const AnalysisSchema = z.object({
-  cleanedText: z.string().trim().min(3).max(MAX_DREAM_CHARS + 2000),
+  cleanedText: CleanedTextSchema,
   title: z.string().trim().min(1).max(80),
   symbols: z.array(SymbolSchema).min(3).max(6),
   imagePrompt: z.string().trim().min(10).max(1500),

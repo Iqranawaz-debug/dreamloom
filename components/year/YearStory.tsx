@@ -22,8 +22,8 @@ const SLIDE_MS = 7000;
 function DreamSlide({ eyebrow, dream }: { eyebrow: string; dream: StoryDream }) {
   return (
     <>
-      {dream.imageUrl && <img src={dream.imageUrl} alt="" className="ken-burns absolute inset-0 h-full w-full object-cover" />}
-      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-night-0 via-night-0/55 to-night-0/20" />
+      {dream.imageUrl && <img src={dream.imageUrl} alt="" className="ken-burns absolute -inset-x-6 -bottom-[5.5rem] -top-12 h-[calc(100%+8.5rem)] w-[calc(100%+3rem)] max-w-none object-cover" />}
+      <div aria-hidden className="absolute -inset-x-6 -bottom-[5.5rem] -top-12 bg-gradient-to-t from-night-0 via-night-0/55 to-night-0/20" />
       <div className="relative mt-auto">
         <p className="eyebrow text-ink-muted">{eyebrow}</p>
         <h2 className="font-display mt-3 text-5xl">{dream.title}</h2>

@@ -59,9 +59,9 @@ export function MoodChart({ dreams, now }: { dreams: InsightDream[]; now: number
         <h2 id="mood-title" className="font-display text-3xl">
           Moods over time
         </h2>
-        <div role="radiogroup" aria-label="Time range" className="flex gap-1">
+        <div role="group" aria-label="Time range" className="flex gap-1">
           {([30, 90] as const).map((r) => (
-            <button key={r} type="button" role="radio" aria-checked={range === r} onClick={() => setRange(r)} className="chip">
+            <button key={r} type="button" aria-pressed={range === r} onClick={() => setRange(r)} className="chip">
               {r} days
             </button>
           ))}
