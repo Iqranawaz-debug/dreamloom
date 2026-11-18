@@ -69,7 +69,7 @@ export function DreamView({ dream, onChange, reveal = false }: { dream: DreamDet
     <article className="mx-auto w-full max-w-3xl px-4 pt-6 sm:px-6 sm:pt-10" aria-labelledby="dream-title">
       <header className={reveal ? "animate-rise-in" : undefined}>
         <p className="eyebrow flex flex-wrap items-center gap-x-3 gap-y-1">
-          <time dateTime={new Date(dream.createdAt).toISOString()}>{formatDate(dream.createdAt)}</time>
+          <time suppressHydrationWarning dateTime={new Date(dream.createdAt).toISOString()}>{formatDate(dream.createdAt)}</time>
           {mood && (
             <span className="inline-flex items-center gap-1.5 normal-case tracking-normal">
               <span className="mood-dot" style={{ background: mood.color }} aria-hidden />

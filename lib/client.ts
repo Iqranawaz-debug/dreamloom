@@ -33,5 +33,6 @@ export async function api<T>(url: string, init: { method?: string; body?: unknow
   return data;
 }
 
+// Fixed locale so server-rendered and hydrated dates match.
 export const formatDate = (d: Date | string | number, opts: Intl.DateTimeFormatOptions = { dateStyle: "long" }) =>
-  new Intl.DateTimeFormat(undefined, opts).format(new Date(d));
+  new Intl.DateTimeFormat("en-GB", opts).format(new Date(d));
