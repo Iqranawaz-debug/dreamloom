@@ -548,6 +548,21 @@ select.field option {
   50% { transform: scale(1.08); filter: hue-rotate(25deg); }
 }
 
+.ken-burns {
+  animation: ken-burns 38s ease-in-out infinite alternate;
+  transform-origin: 50% 50%;
+}
+.mote {
+  position: absolute;
+  bottom: 8%;
+  border-radius: 999px;
+  background: rgb(255 248 230 / 0.9);
+  box-shadow: 0 0 6px rgb(255 240 210 / 0.6);
+  opacity: 0;
+  pointer-events: none;
+  animation: mote var(--mote-dur, 12s) linear var(--mote-delay, 0s) infinite;
+}
+
 .animate-page-in { animation: page-in var(--dur-slow) var(--ease-soft) both; }
 .animate-fade-in { animation: fade-in var(--dur-slow) var(--ease-soft) both; }
 .animate-rise-in { animation: rise-in var(--dur-slow) var(--ease-soft) both; }
@@ -562,6 +577,9 @@ select.field option {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .mote {
+    display: none;
   }
   .nebula,
   .orb,
