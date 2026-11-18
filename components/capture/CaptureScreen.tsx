@@ -6,6 +6,7 @@ import { MAX_DREAM_CHARS, MOODS, type Mood } from "@/lib/constants";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import { Icon } from "@/components/ui/Icon";
 import { DreamOrb } from "@/components/dream/DreamOrb";
+import { Overlay } from "@/components/ui/Overlay";
 
 const DRAFT_KEY = "dp:draft";
 type Mode = "voice" | "write";
@@ -215,7 +216,7 @@ export function CaptureScreen() {
             <label htmlFor={ids.text} className="sr-only">
               Your dream
             </label>
-            <div className="glass relative overflow-hidden p-1">
+            <div className="glass writing-surface relative overflow-hidden p-1">
               <textarea
                 ref={textareaRef}
                 id={ids.text}
@@ -312,13 +313,13 @@ export function CaptureScreen() {
 
       {/* Transition: capture fades into deep midnight */}
       {leaving && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-night-0/95 animate-fade-in" role="status" aria-live="polite">
+        <Overlay role="status" aria-live="polite">
           <div className="flex flex-col items-center gap-8 px-6 text-center">
             <DreamOrb />
             <p className="font-display text-3xl text-ink">Your dream is taking shape...</p>
             <p className="text-ink-muted">Listening to your dream...</p>
           </div>
-        </div>
+        </Overlay>
       )}
     </>
   );

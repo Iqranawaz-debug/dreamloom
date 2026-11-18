@@ -115,10 +115,15 @@ body {
   color: var(--ink);
 }
 
-:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
+@layer base {
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
 }
+
+/* Component classes live in a layer so Tailwind utilities can override them. */
+@layer components {
 
 /* ---------- Typography ---------- */
 .font-display {
@@ -393,6 +398,12 @@ select.field option {
   animation: shimmer 2.4s ease-in-out infinite;
   border-radius: var(--radius-md);
 }
+.writing-surface:focus-within {
+  border-color: rgb(201 188 255 / 0.45);
+}
+.writing-surface textarea:focus-visible {
+  box-shadow: none;
+}
 .sr-only-focusable:not(:focus) {
   position: absolute;
   width: 1px;
@@ -400,6 +411,8 @@ select.field option {
   overflow: hidden;
   clip: rect(0 0 0 0);
 }
+
+} /* end @layer components */
 
 /* ==========================================================================
    Atmosphere: fixed, non-interactive, transform/opacity-only animations

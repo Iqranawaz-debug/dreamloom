@@ -17,7 +17,11 @@ function isActive(pathname: string, href: string) {
 }
 
 export function SiteNav() {
-  const pathname = usePathname();
+  return <SiteNavView pathname={usePathname()} />;
+}
+
+/** Rendered with an empty pathname as the Suspense fallback, then hydrated with the real one. */
+export function SiteNavView({ pathname }: { pathname: string }) {
   if (pathname === "/lock") return null;
   return (
     <>

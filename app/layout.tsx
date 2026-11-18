@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Atmosphere } from "@/components/Atmosphere";
-import { SiteNav } from "@/components/SiteNav";
+import { SiteNav, SiteNavView } from "@/components/SiteNav";
+import { Suspense } from "react";
 import { PwaAgent } from "@/components/PwaAgent";
 
 // next/font self-hosts these at build time: no runtime requests to Google.
@@ -40,7 +41,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <Atmosphere />
-        <SiteNav />
+        <Suspense fallback={<SiteNavView pathname="" />}>
+          <SiteNav />
+        </Suspense>
         <main id="main" className="flex flex-1 flex-col pb-24 sm:pb-12">
           {children}
         </main>
