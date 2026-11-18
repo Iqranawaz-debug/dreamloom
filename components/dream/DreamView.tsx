@@ -9,6 +9,8 @@ import { api, formatDate } from "@/lib/client";
 import { Icon } from "@/components/ui/Icon";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { PaintingFrame } from "./PaintingFrame";
+import { ReadAloud } from "./ReadAloud";
+import { ShareCard } from "./ShareCard";
 
 export function DreamView({ dream, onChange, reveal = false }: { dream: DreamDetail; onChange: (d: DreamDetail) => void; reveal?: boolean }) {
   const router = useRouter();
@@ -167,6 +169,8 @@ export function DreamView({ dream, onChange, reveal = false }: { dream: DreamDet
       )}
 
       <div className="mt-6 flex flex-wrap items-center justify-center gap-2" data-slot="extra-actions">
+        {dream.poem && <ReadAloud text={dream.poem} />}
+        <ShareCard dream={dream} />
         <button className="btn btn-ghost btn-sm text-danger hover:text-danger" onClick={() => setConfirm(true)} disabled={!!busy}>
           <Icon name="trash" className="h-4 w-4" /> Delete dream
         </button>
