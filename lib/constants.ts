@@ -1,12 +1,13 @@
 // Shared (client + server) vocabulary. No secrets here.
 
+// Colors validated as a categorical set on the dark surface (CVD-safe, fixed order).
 export const MOODS = [
-  { id: "calm", label: "Calm", emoji: "😌", color: "#8fb8de" },
-  { id: "joyful", label: "Joyful", emoji: "😊", color: "#f2c58c" },
-  { id: "scared", label: "Scared", emoji: "😨", color: "#d98a9a" },
-  { id: "sad", label: "Sad", emoji: "😢", color: "#8a9cd6" },
-  { id: "weird", label: "Weird", emoji: "🌀", color: "#b79ef0" },
-  { id: "confused", label: "Confused", emoji: "😵‍💫", color: "#8ed4c6" },
+  { id: "calm", label: "Calm", emoji: "😌", color: "#3a9bd8" },
+  { id: "joyful", label: "Joyful", emoji: "😊", color: "#b98210" },
+  { id: "scared", label: "Scared", emoji: "😨", color: "#e2566e" },
+  { id: "sad", label: "Sad", emoji: "😢", color: "#6a6cf0" },
+  { id: "weird", label: "Weird", emoji: "🌀", color: "#cf62b8" },
+  { id: "confused", label: "Confused", emoji: "😵‍💫", color: "#1aa36f" },
 ] as const;
 export type Mood = (typeof MOODS)[number]["id"];
 export const MOOD_IDS = MOODS.map((m) => m.id) as [Mood, ...Mood[]];
