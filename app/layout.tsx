@@ -22,6 +22,7 @@ export const metadata: Metadata = {
   applicationName: "Dream Painter",
   appleWebApp: { capable: true, title: "Dream Painter", statusBarStyle: "black-translucent" },
   formatDetection: { telephone: false },
+  icons: { apple: "/icons/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = {
@@ -44,7 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Suspense fallback={<SiteNavView pathname="" />}>
           <SiteNav />
         </Suspense>
-        <main id="main" className="flex flex-1 flex-col pb-24 sm:pb-12">
+        <main id="main" tabIndex={-1} className="flex flex-1 flex-col pb-24 sm:pb-12">
           {children}
         </main>
         <PwaAgent />
