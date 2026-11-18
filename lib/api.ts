@@ -1,5 +1,6 @@
 import "server-only";
 import { NextResponse } from "next/server";
+import { unstable_rethrow } from "next/navigation";
 import { ZodError, z } from "zod";
 import Anthropic from "@anthropic-ai/sdk";
 import { AiOutputError } from "@/lib/ai/text";
@@ -60,6 +61,7 @@ export function handle<Ctx>(fn: (req: Request, ctx: Ctx) => Promise<Response>) {
     try {
       return await fn(req, ctx);
     } catch (e) {
+      unstable_rethrow(e); // framework signals (such as prerender bailouts) are not errors
       if (e instanceof HttpError) return NextResponse.json({ error: e.message }, { status: e.status });
       if (e instanceof ZodError)
         return NextResponse.json(
