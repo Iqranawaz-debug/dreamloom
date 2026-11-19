@@ -23,3 +23,14 @@ export interface ImageProvider {
   name: string;
   paint(imagePrompt: string, style: PaintStyle, mood: Mood | null): Promise<Painting>;
 }
+
+/** A provider failure with a safe, user-facing message (never includes dream text). */
+export class ProviderError extends Error {
+  constructor(
+    public status: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = "ProviderError";
+  }
+}

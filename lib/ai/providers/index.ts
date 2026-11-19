@@ -3,6 +3,7 @@ import type { ImageProvider, TextProvider } from "./types";
 import { mockText } from "./mock-text";
 import { mockImage } from "./mock-image";
 import { anthropicText } from "./anthropic-text";
+import { openaiImage } from "./openai-image";
 
 /**
  * Provider registry. To add a real provider: create a file in this folder that
@@ -16,6 +17,7 @@ const textProviders: Record<string, () => TextProvider> = {
 
 const imageProviders: Record<string, () => ImageProvider> = {
   mock: () => mockImage,
+  openai: openaiImage,
 };
 
 export const isMockAi = () => (process.env.USE_MOCK_AI ?? "true").toLowerCase() !== "false";
@@ -28,5 +30,5 @@ function pick<T>(kind: string, map: Record<string, () => T>, configured: string 
 }
 
 export const getTextProvider = () => pick("text", textProviders, process.env.TEXT_PROVIDER, "anthropic");
-// No real image provider yet: falls back to the mock painter even when USE_MOCK_AI=false.
+// Paintings stay on the mock painter unless IMAGE_PROVIDER names a real one.
 export const getImageProvider = () => pick("image", imageProviders, process.env.IMAGE_PROVIDER, "mock");

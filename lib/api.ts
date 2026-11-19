@@ -4,6 +4,7 @@ import { unstable_rethrow } from "next/navigation";
 import { ZodError, z } from "zod";
 import Anthropic from "@anthropic-ai/sdk";
 import { AiOutputError } from "@/lib/ai/text";
+import { ProviderError } from "@/lib/ai/providers/types";
 
 export class HttpError extends Error {
   constructor(
@@ -72,6 +73,7 @@ export function handle<Ctx>(fn: (req: Request, ctx: Ctx) => Promise<Response>) {
         console.error("[ai] invalid output:", e.cause instanceof ZodError ? e.cause.issues.map((i) => `${i.path.join(".")}: ${i.code}`) : e.name);
         return NextResponse.json({ error: "The dream spirits mumbled. Please try again." }, { status: 502 });
       }
+      if (e instanceof ProviderError) return NextResponse.json({ error: e.message }, { status: e.status });
       if (e instanceof Anthropic.APIError) {
         console.error("[ai] provider error:", e.status, e.name);
         const msg =

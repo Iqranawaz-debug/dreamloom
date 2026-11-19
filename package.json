@@ -12,7 +12,8 @@
     "db:studio": "drizzle-kit studio",
     "typecheck": "tsc --noEmit",
     "db:seed": "tsx --conditions=react-server scripts/seed.ts",
-    "test:pipeline": "tsx --conditions=react-server scripts/test-pipeline.ts"
+    "test:pipeline": "tsx --conditions=react-server scripts/test-pipeline.ts",
+    "test:openai-image": "tsx --conditions=react-server scripts/test-openai-image.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.10.0",
