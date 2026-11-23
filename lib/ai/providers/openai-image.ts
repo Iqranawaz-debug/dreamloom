@@ -2,25 +2,7 @@ import "server-only";
 import { z } from "zod";
 import type { ImageProvider } from "./types";
 import { ProviderError } from "./types";
-import type { Mood, PaintStyle } from "@/lib/constants";
-
-// Painting style -> art direction appended to the dream's image prompt.
-const STYLE_DIRECTION: Record<PaintStyle, string> = {
-  watercolor: "soft watercolor painting on textured paper, translucent washes, gentle bleeding edges",
-  oil: "rich oil painting on canvas, visible brushstrokes, deep layered color, painterly light",
-  surrealist: "surrealist painting, dreamlike impossible geometry, long soft shadows, uncanny calm",
-  anime: "anime background art, luminous sky, clean shapes, cinematic and serene",
-  "dreamy-digital": "dreamy digital painting, ethereal glow, soft focus, atmospheric haze",
-};
-
-const MOOD_LIGHT: Partial<Record<Mood, string>> = {
-  calm: "quiet, peaceful light",
-  joyful: "warm, uplifting light",
-  scared: "tense, shadowed light that stays gentle rather than graphic",
-  sad: "muted, tender light",
-  weird: "strange, shifting light",
-  confused: "hazy, overlapping light",
-};
+import { paintingPrompt } from "./prompts";
 
 const Config = z.object({
   OPENAI_API_KEY: z.string().min(1, "OPENAI_API_KEY is not set"),
@@ -48,14 +30,7 @@ export function openaiImage(): ImageProvider {
       if (!parsed.success) throw new ProviderError(500, "The painter isn't set up yet (check OPENAI_* in .env.local).");
       const cfg = parsed.data;
 
-      const prompt = [
-        imagePrompt,
-        `Style: ${STYLE_DIRECTION[style]}.`,
-        mood && MOOD_LIGHT[mood] ? `Atmosphere: ${MOOD_LIGHT[mood]}.` : "",
-        "A single artwork, no text, letters, signatures or watermarks.",
-      ]
-        .filter(Boolean)
-        .join("\n");
+      const prompt = paintingPrompt(imagePrompt, style, mood);
 
       let res: globalThis.Response;
       try {
