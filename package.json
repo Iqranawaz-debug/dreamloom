@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "db:seed": "tsx --conditions=react-server scripts/seed.ts",
     "test:pipeline": "tsx --conditions=react-server scripts/test-pipeline.ts",
-    "test:openai-image": "tsx --conditions=react-server scripts/test-openai-image.ts"
+    "test:openai-image": "tsx --conditions=react-server scripts/test-openai-image.ts",
+    "test:gemini": "tsx --conditions=react-server scripts/test-gemini.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.10.0",

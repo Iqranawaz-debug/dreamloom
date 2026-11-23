@@ -4,6 +4,8 @@ import { mockText } from "./mock-text";
 import { mockImage } from "./mock-image";
 import { anthropicText } from "./anthropic-text";
 import { openaiImage } from "./openai-image";
+import { geminiText } from "./gemini-text";
+import { geminiImage } from "./gemini-image";
 
 /**
  * Provider registry. To add a real provider: create a file in this folder that
@@ -13,11 +15,13 @@ import { openaiImage } from "./openai-image";
 const textProviders: Record<string, () => TextProvider> = {
   mock: () => mockText,
   anthropic: anthropicText,
+  gemini: geminiText,
 };
 
 const imageProviders: Record<string, () => ImageProvider> = {
   mock: () => mockImage,
   openai: openaiImage,
+  gemini: geminiImage,
 };
 
 export const isMockAi = () => (process.env.USE_MOCK_AI ?? "true").toLowerCase() !== "false";
