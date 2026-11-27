@@ -41,6 +41,19 @@ yarn-error.log*
 next-env.d.ts
 !.env.example
 
+# AI assistant notes and local tool config (kept on disk, not in the repo)
+CLAUDE.md
+AGENTS.md
+/.claude/
+
+# editors and OS files
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+*.log
+
 # local dream data (privacy: never commit)
 /data/*
 !/data/.gitkeep
